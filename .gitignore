@@ -1,0 +1,5 @@
+.git/
+.vscode
+venv/
+todo/__pycache__
+todo/todo.db

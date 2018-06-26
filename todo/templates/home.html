@@ -1,0 +1,81 @@
+{% extends "layout.html" %}
+    {% block content %}
+    <div class="container mt-3">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Task</th>
+                <th scope="col">Submitted</th>
+                <th scope="col">Priority</th>
+                <th scope="col">Status</th>
+                <th scope="col">Mark completed</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for task in tasks %}
+                    <tr>
+                        <th scope="row">{{task.id}}</th>
+                        <td>{{task.title}}</td>
+                        <td>{{task.date_posted}}</td>
+                        <td>{{task.priority}}</td>
+                        <td>{{task.status}}</td>
+                        <td>
+                            <form action="{{ url_for('finish_task', task_id=task.id) }}" method="POST">
+                                <input type="submit" name="completed" value="Completed" />
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="new-task" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">New Task</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+            <form method="POST" action="">
+                {{ todo_form.hidden_tag() }}
+                <div class="form-group">
+                        {{ todo_form.task.label(class="form-control-label") }}
+                        {% if todo_form.task.errors %}
+                            {{ todo_form.task(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in todo_form.task.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ todo_form.task(class="form-control form-control-lg") }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        {{ todo_form.priority.label(class="form-control-label") }}
+                        {% if todo_form.priority.errors %}
+                            {{ todo_form.priority(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                                {% for error in todo_form.task.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ todo_form.priority }}
+                        {% endif %}
+                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    {{ todo_form.add(class="btn btn-info") }}
+                </div>
+            </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endblock content %}
