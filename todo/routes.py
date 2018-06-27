@@ -42,9 +42,16 @@ def home():
         db.session.commit()
         flash('Your task has been added!', 'success')
         return redirect(url_for('home'))
+
     if request.method == 'GET':
         tasks = Todo.query.order_by(Todo.date_posted).filter_by(user_id=current_user.id, status="In Progress")
         return render_template('home.html', title='Your things todo!', todo_form=todo_form, tasks=tasks)
+
+@app.route("/completed", methods=['GET', 'POST'])
+@login_required
+def completed_tasks():
+    tasks = Todo.query.order_by(Todo.date_posted).filter_by(user_id=current_user.id, status="Completed")
+    return render_template('completed.html', title='Things you\'e done!', tasks=tasks)
 
 @app.route("/finishtask/<int:task_id>", methods=['POST'])
 @login_required
